@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focusly - Property Management Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="modern-ui.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .demo-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .demo-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1F2937;
+            border-bottom: 3px solid #6366F1;
+            padding-bottom: 10px;
+        }
+
+        .property-demo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .property-card {
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 20px;
+            background: #F9FAFB;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            border-color: #6366F1;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+
+        .property-name {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-icon {
+            color: #6366F1;
+            font-size: 1.1rem;
+        }
+
+        .property-input-wrapper {
+            margin-top: 12px;
+        }
+
+        .property-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: #F3F4F6;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .property-button:hover {
+            background: #E5E7EB;
+            border-color: #9CA3AF;
+        }
+
+        .property-button.active {
+            background: #6366F1;
+            border-color: #4F46E5;
+            color: white;
+        }
+
+        .code-block {
+            background: #1F2937;
+            color: #E5E7EB;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 12px;
+        }
+
+        .active-properties {
+            background: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+
+        .active-properties h3 {
+            color: #4F46E5;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .property-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .property-item {
+            background: #6366F1;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .property-item .remove-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .property-item .remove-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .ai-chat-demo {
+            max-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-instructions {
+            background: #F0F9FF;
+            border-left: 4px solid #0EA5E9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: #0C4A6E;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .feature-box {
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .feature-box h4 {
+            color: #6366F1;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .feature-box p {
+            color: #6B7280;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Focusly
+        </a>
+
+        <div class="demo-header">
+            <h1>🎯 Focusly Property Management System</h1>
+            <p>Advanced type-aware properties with no duplicates • ChatGPT-style AI assistant</p>
+        </div>
+
+        <!-- Property Management Demo Section -->
+        <div class="demo-section">
+            <h2 class="section-title"><i class="fas fa-cog"></i> Property Types</h2>
+            
+            <div class="property-demo" id="property-demo">
+                <!-- Status Property -->
+                <div class="property-card">
+                    <div class="property-name">
+                        <i class="property-icon fas fa-circle"></i>
+                        Status
+                    </div>
+                    <p style="color: #6B7280; font-size: 12px; margin: 0;">Select task priority/state</p>
+                    <button class="property-button" data-property="STATUS">
+                        <i class="fas fa-check"></i> Toggle Status
+                    </button>
+                    <div class="code-block">Status: ['Todo', 'In Progress', 'Done']</div>
+                </div>
+
+                <!-- Date Property -->
+                <div class="property-card">
+                    <div class="property-name">
+                        <i class="property-icon fas fa-calendar"></i>
+                        Date
+                    </div>
+                    <p style="color: #6B7280; font-size: 12px; margin: 0;">Set deadlines & schedules</p>
+                    <button class="property-button" data-property="DATE">
+                        <i class="fas fa-check"></i> Toggle Date
+                    </button>
+                    <div class="code-block">Format: dd-mm-yyyy (ISO stored)</div>
+                </div>
+
+                <!-- Checkbox Property -->
+                <div class="property-card">
+                    <div class="property-name">
+                        <i class="property-icon fas fa-square"></i>
+                        Checkbox
+                    </div>
+                    <p style="color: #6B7280; font-size: 12px; margin: 0;">Boolean toggle property</p>
+                    <button class="property-button" data-property="CHECKBOX">
+                        <i class="fas fa-check"></i> Toggle Checkbox
+                    </button>
+                    <div class="code-block">Value: true/false</div>
+                </div>
+
+                <!-- Number Property -->
+                <div class="property-card">
+                    <div class="property-name">
+                        <i class="property-icon fas fa-hash"></i>
+                        Number
+                    </div>
+                    <p style="color: #6B7280; font-size: 12px; margin: 0;">Numeric values with validation</p>
+                    <button class="property-button" data-property="NUMBER">
+                        <i class="fas fa-check"></i> Toggle Number
+                    </button>
+                    <div class="code-block">Input: number only</div>
+                </div>
+            </div>
+
+            <div class="active-properties">
+                <h3>✅ Currently Active Properties</h3>
+                <div class="property-list" id="active-props-list">
+                    <p style="color: #9CA3AF; font-size: 12px; margin: 0;">Click property buttons above to toggle</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="demo-section">
+            <h2 class="section-title"><i class="fas fa-star"></i> Key Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-box">
+                    <h4>🔄 Toggle Behavior</h4>
+                    <p>Click property once to add, click again to remove. No duplicates possible.</p>
+                </div>
+
+                <div class="feature-box">
+                    <h4>📝 Type-Aware Rendering</h4>
+                    <p>Each property type has custom input UI and display formatting.</p>
+                </div>
+
+                <div class="feature-box">
+                    <h4>🎨 Color Coded</h4>
+                    <p>Status badges with automatic color coding (Todo gray, In Progress orange, Done green).</p>
+                </div>
+
+                <div class="feature-box">
+                    <h4>📅 Date Formatting</h4>
+                    <p>Stores as ISO date internally, displays as dd-mm-yyyy for better UX.</p>
+                </div>
+
+                <div class="feature-box">
+                    <h4>✔️ Validation</h4>
+                    <p>Number fields validate input, checkboxes are boolean, dates are ISO formatted.</p>
+                </div>
+
+                <div class="feature-box">
+                    <h4>🔗 Event System</h4>
+                    <p>PropertyManager emits events when properties change for real-time UI sync.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chat Demo Section -->
+        <div class="demo-section">
+            <h2 class="section-title"><i class="fas fa-robot"></i> AI Chat Assistant</h2>
+            
+            <div class="chat-instructions">
+                <i class="fas fa-lightbulb"></i> <strong>Try asking:</strong> "What properties should I add to my task?", "Help me plan my day", or any productivity question
+            </div>
+
+            <div class="ai-chat-container">
+                <div class="ai-chat-messages"></div>
+                <div class="ai-chat-input-area">
+                    <input type="text" class="ai-chat-input" placeholder="Ask me anything...">
+                    <button class="ai-chat-send-btn">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 16px; font-size: 12px; color: #9CA3AF;">
+                <i class="fas fa-zap"></i> Powered by Gemini AI
+            </div>
+        </div>
+
+        <!-- Code Example Section -->
+        <div class="demo-section">
+            <h2 class="section-title"><i class="fas fa-code"></i> Usage Examples</h2>
+            
+            <h3 style="color: #374151; margin-top: 20px; margin-bottom: 10px;">Toggle a Property</h3>
+            <div class="code-block">// Add or remove a property
+const wasAdded = window.PropertyManager.toggle('STATUS');
+console.log(wasAdded); // true if added, false if removed</div>
+
+            <h3 style="color: #374151; margin-top: 20px; margin-bottom: 10px;">Set Property Value</h3>
+            <div class="code-block">// Set value for existing property
+window.PropertyManager.setValue('DATE', '2024-01-20');
+window.PropertyManager.setValue('STATUS', 'In Progress');
+window.PropertyManager.setValue('NUMBER', 42);</div>
+
+            <h3 style="color: #374151; margin-top: 20px; margin-bottom: 10px;">Get All Active Properties</h3>
+            <div class="code-block">// Get a Map of all active properties
+const props = window.PropertyManager.getAll();
+props.forEach((value, type) => {
+    console.log(`${type}: ${value}`);
+});</div>
+
+            <h3 style="color: #374151; margin-top: 20px; margin-bottom: 10px;">Listen to Property Changes</h3>
+            <div class="code-block">window.PropertyManager.addEventListener((event, data) => {
+    if (event === 'propertyAdded') {
+        console.log(`Added: ${data.type}`);
+    } else if (event === 'propertyRemoved') {
+        console.log(`Removed: ${data.type}`);
+    }
+});</div>
+
+            <h3 style="color: #374151; margin-top: 20px; margin-bottom: 10px;">Render Property Value</h3>
+            <div class="code-block">// Use PropertyTypes to render values
+const propDef = window.PropertyTypes.STATUS;
+const rendered = propDef.render('In Progress');
+// Outputs: colored badge with "In Progress"</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="focusly-ui.js"></script>
+    <script>
+        // Demo functionality
+        const propertyButtons = document.querySelectorAll('[data-property]');
+        const activePropsBox = document.getElementById('active-props-list');
+
+        function updateActivePropertiesDisplay() {
+            const props = window.PropertyManager.getAll();
+            if (props.size === 0) {
+                activePropsBox.innerHTML = '<p style="color: #9CA3AF; font-size: 12px; margin: 0;">No properties selected yet</p>';
+                return;
+            }
+
+            activePropsBox.innerHTML = '';
+            props.forEach((value, type) => {
+                const item = document.createElement('div');
+                item.className = 'property-item';
+                const propDef = window.PropertyTypes[type];
+                item.innerHTML = `
+                    ${propDef.name}
+                    <button class="remove-btn" data-type="${type}">×</button>
+                `;
+                item.querySelector('.remove-btn').addEventListener('click', () => {
+                    window.PropertyManager.toggle(type);
+                });
+                activePropsBox.appendChild(item);
+            });
+        }
+
+        // Update buttons when properties change
+        window.PropertyManager.addEventListener((event) => {
+            propertyButtons.forEach(btn => {
+                const type = btn.dataset.property;
+                if (window.PropertyManager.hasProperty(type)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            updateActivePropertiesDisplay();
+        });
+
+        // Initial display
+        updateActivePropertiesDisplay();
+    </script>
+</body>
+</html>
